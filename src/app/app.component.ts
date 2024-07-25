@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 
@@ -9,27 +10,40 @@ import Swal from 'sweetalert2';
 })
 export class AppComponent implements OnInit {
   title = 'employeeInfo';
-  constructor(private _tostr: ToastrService) {}
+  registerForm: FormGroup; // Corrected type declaration
+
+  constructor(
+    private _tostr: ToastrService,
+    private _formBuilder: FormBuilder
+  ) {}
+
   ngOnInit() {
-    Swal.fire({
-      title: '<strong>HTML <u>example</u></strong>',
-      icon: 'info',
-      html: `
-        You can use <b>bold text</b>,
-        <a href="#" autofocus>links</a>,
-        and other HTML tags
-      `,
-      showCloseButton: true,
-      showCancelButton: true,
-      focusConfirm: false,
-      confirmButtonText: `
-        <i class="fa fa-thumbs-up"></i> Great!
-      `,
-      confirmButtonAriaLabel: 'Thumbs up, great!',
-      cancelButtonText: `
-        <i class="fa fa-thumbs-down"></i>
-      `,
-      cancelButtonAriaLabel: 'Thumbs down',
+    this.initialStateOfregisterForm(); // Initialize the form in ngOnInit
+  }
+
+  initialStateOfregisterForm() {
+    this.registerForm = this._formBuilder.group({
+      // Add your form controls here
+      id: [0], // Example form control
+      jobTitle: ['', Validators.required],
+      experience: ['', Validators.required],
+      firstName: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(10),
+        ]),
+      ],
+      lastName: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(10),
+        ]),
+      ],
+      email: ['', Validators.compose([Validators.required, Validators.email])],
     });
   }
 }
